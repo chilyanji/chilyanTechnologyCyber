@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard by CHILYAN Technology</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with CHILYAN branding -->
+        <header class="header">
+            <div class="logo-section">
+                <img src="/images/logo.png" alt="CHILYAN Technology" class="company-logo">
+                <div class="branding">
+                    <h1>PhishGuard</h1>
+                    <p>By CHILYAN Technology</p>
+                    <p class="slogan">Detect. Classify. Respond. Protect.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <button class="nav-btn active" onclick="switchTab('detector')">Detector</button>
+            <button class="nav-btn" onclick="switchTab('dashboard')">Dashboard</button>
+            <button class="nav-btn" onclick="switchTab('about')">About</button>
+        </nav>
+
+        <!-- Detector Tab -->
+        <section id="detector" class="tab-content active">
+            <div class="detector-container">
+                <h2>Real-Time Threat Detection</h2>
+                
+                <!-- Input Type Selection -->
+                <div class="input-type-selector">
+                    <button class="type-btn active" onclick="selectType('url')">URL Check</button>
+                    <button class="type-btn" onclick="selectType('email')">Email Analysis</button>
+                    <button class="type-btn" onclick="selectType('sms')">SMS/Smishing</button>
+                </div>
+
+                <!-- URL Detection -->
+                <div id="url-input" class="input-section active">
+                    <h3>Enter URL to Analyze</h3>
+                    <div class="input-group">
+                        <input type="text" id="urlInput" placeholder="https://example.com" class="input-field">
+                        <button onclick="detectThreat('url')" class="btn-primary">Analyze URL</button>
+                    </div>
+                </div>
+
+                <!-- Email Detection -->
+                <div id="email-input" class="input-section">
+                    <h3>Paste Email Content</h3>
+                    <div class="input-group">
+                        <textarea id="emailInput" placeholder="Enter email headers and body..." class="input-field textarea"></textarea>
+                        <button onclick="detectThreat('email')" class="btn-primary">Analyze Email</button>
+                    </div>
+                </div>
+
+                <!-- SMS Detection -->
+                <div id="sms-input" class="input-section">
+                    <h3>Enter SMS Message</h3>
+                    <div class="input-group">
+                        <textarea id="smsInput" placeholder="Enter SMS message..." class="input-field textarea"></textarea>
+                        <button onclick="detectThreat('sms')" class="btn-primary">Analyze SMS</button>
+                    </div>
+                </div>
+
+                <!-- Loading indicator -->
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Analyzing threat...</p>
+                </div>
+
+                <!-- Detection Result -->
+                <div id="result" class="result-container" style="display: none;">
+                    <div id="resultContent"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Tab -->
+        <section id="dashboard" class="tab-content">
+            <div class="dashboard-container">
+                <h2>Threat Analytics Dashboard</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Detections</h3>
+                        <p id="totalDetections" class="stat-value">0</p>
+                    </div>
+                    <div class="stat-card danger">
+                        <h3>Malicious Threats</h3>
+                        <p id="maliciousCount" class="stat-value">0</p>
+                    </div>
+                    <div class="stat-card warning">
+                        <h3>Suspicious Items</h3>
+                        <p id="suspiciousCount" class="stat-value">0</p>
+                    </div>
+                    <div class="stat-card success">
+                        <h3>Legitimate</h3>
+                        <p id="legitimateCount" class="stat-value">0</p>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Threat Distribution</h3>
+                        <canvas id="threatChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Detection by Type</h3>
+                        <canvas id="typeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Detections -->
+                <div class="recent-section">
+                    <h3>Recent Detections</h3>
+                    <div id="recentDetections" class="detection-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Tab -->
+        <section id="about" class="tab-content">
+            <div class="about-container">
+                <h2>About PhishGuard</h2>
+                <div class="about-content">
+                    <h3>CHILYAN Technology - PhishGuard</h3>
+                    <p><strong>Version:</strong> 1.0.0</p>
+                    <p><strong>Slogan:</strong> Detect. Classify. Respond. Protect.</p>
+                    
+                    <h4>What is PhishGuard?</h4>
+                    <p>PhishGuard is an intelligent, real-time phishing detection and response system designed to identify and mitigate phishing attempts across multiple communication channels including emails, SMS, and URLs.</p>
+                    
+                    <h4>Key Features</h4>
+                    <ul>
+                        <li>Real-time threat detection across emails, SMS, and URLs</li>
+                        <li>Three-tier classification: Legitimate, Suspicious, Malicious</li>
+                        <li>Clear, actionable threat explanations</li>
+                        <li>Automated response mechanisms</li>
+                        <li>Comprehensive analytics dashboard</li>
+                        <li>25+ advanced features for accurate detection</li>
+                    </ul>
+                    
+                    <h4>How It Works</h4>
+                    <p>PhishGuard uses machine learning models trained on real-world phishing datasets combined with rule-based detection to classify threats with high accuracy. Each detection is accompanied by a detailed explanation of the detected threat indicators.</p>
+                    
+                    <h4>Company</h4>
+                    <p>PhishGuard is developed and maintained by <strong>CHILYAN Technology</strong>, a leading cybersecurity solutions provider.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
